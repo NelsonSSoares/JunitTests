@@ -22,6 +22,11 @@ public class Planet {
 	
 	
 	
+	@Override
+	public String toString() {
+		return "Planet [id=" + id + ", name=" + name + ", climate=" + climate + ", terrain=" + terrain + "]";
+	}
+
 	public Planet(String name, String climate, String terrain) {
 		super();
 		this.name = name;
