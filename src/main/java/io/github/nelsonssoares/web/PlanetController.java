@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.nelsonssoares.domain.model.Planet;
 import io.github.nelsonssoares.service.PlanetService;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
 @RestController
@@ -33,7 +34,7 @@ public class PlanetController {
 
 
 	@PostMapping
-	public ResponseEntity<Planet> create(@RequestBody Planet planet){
+	public ResponseEntity<Planet> create(@RequestBody @Valid Planet planet){
 		Planet planetCreated = service.create(planet);	
 		return ResponseEntity.status(HttpStatus.CREATED).body(planetCreated);
 	}
