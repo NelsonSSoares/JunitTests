@@ -16,6 +16,6 @@ public interface PlanetRepository extends JpaRepository<Planet, Long>, QueryByEx
 	Optional<Planet> findByName(String name);
 	
 	
-	<S extends Planet> List<S> getList(Example<S> example);
+	//<S extends Planet> List<S> getList(Example<S> example);
 	
 }

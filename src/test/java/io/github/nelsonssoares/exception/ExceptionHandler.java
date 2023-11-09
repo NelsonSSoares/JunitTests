@@ -1,6 +1,7 @@
 package io.github.nelsonssoares.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -22,6 +23,11 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler{
 	@org.springframework.web.bind.annotation.ExceptionHandler(DataIntegrityViolationException.class)
 	private ResponseEntity<Object> handleConflict(DataIntegrityViolationException ex){
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+	}
+	
+	@org.springframework.web.bind.annotation.ExceptionHandler(EmptyResultDataAccessException.class)
+	private ResponseEntity<Object> handlwBadRequest(EmptyResultDataAccessException ex){
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 	
 	

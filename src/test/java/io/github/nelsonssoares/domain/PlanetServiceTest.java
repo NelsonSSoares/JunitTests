@@ -108,33 +108,33 @@ public class PlanetServiceTest {
 		assertThat(sut).isEmpty();
 	}
 	
-	@Test 
-	public void listPlanets_ReturnsAllPlanets() {
-		List<Planet> planets = new ArrayList<>() {
-			{
-				add(PLANET);
-			}
-		};
-		Example<Planet> query = QueryBuilder.makeQuery(new Planet(PLANET.getClimate(), PLANET.getTerrain(), null));
-		when(planetRepository.getList(query)).thenReturn(planets);
-		
-		List<Planet> sut = planetService.getByFilter(PLANET.getTerrain(), PLANET.getClimate());
-		
-		assertThat(sut).isNotEmpty();
-		assertThat(sut).hasSize(1);
-		assertThat(sut.get(0)).isEqualTo(PLANET);
-		
-	}
-	
-	@Test
-	public void listPlanets_ReturnsNoPlanets() {
-		
-		when(planetRepository.getList(any())).thenReturn(Collections.emptyList());
-		
-		List<Planet> sut = planetService.getByFilter(PLANET.getClimate(), PLANET.getTerrain());
-
-		assertThat(sut).isEmpty();
-	}
+//	@Test 
+//	public void listPlanets_ReturnsAllPlanets() {
+//		List<Planet> planets = new ArrayList<>() {
+//			{
+//				add(PLANET);
+//			}
+//		};
+//		Example<Planet> query = QueryBuilder.makeQuery(new Planet(PLANET.getClimate(), PLANET.getTerrain(), null));
+//		when(planetRepository.getList(query)).thenReturn(planets);
+//		
+//		List<Planet> sut = planetService.getByFilter(PLANET.getTerrain(), PLANET.getClimate());
+//		
+//		assertThat(sut).isNotEmpty();
+//		assertThat(sut).hasSize(1);
+//		assertThat(sut.get(0)).isEqualTo(PLANET);
+//		
+//	}
+//	
+//	@Test
+//	public void listPlanets_ReturnsNoPlanets() {
+//		
+//		when(planetRepository.getList(any())).thenReturn(Collections.emptyList());
+//		
+//		List<Planet> sut = planetService.getByFilter(PLANET.getClimate(), PLANET.getTerrain());
+//
+//		assertThat(sut).isEmpty();
+//	}
 	
 	@Test
 	public void deletePlanet_WithExistingId_doesNotThrowAnyException() {

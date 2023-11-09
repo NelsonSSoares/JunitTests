@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
+import org.springframework.test.context.ActiveProfiles;
 
 import io.github.nelsonssoares.domain.model.Planet;
 import io.github.nelsonssoares.domain.model.QueryBuilder;
@@ -22,6 +24,7 @@ import io.github.nelsonssoares.domain.model.QueryBuilder;
 import static io.github.nelsonssoares.commons.PlanetConstants.PLANET;
 import static io.github.nelsonssoares.commons.PlanetConstants.TATOOINE;
 
+@ActiveProfiles("test")
 @DataJpaTest // Gera banco em memoria H2, para teste de banco de dados
 public class PlanetRepositoryTest {
 	
@@ -107,26 +110,40 @@ public class PlanetRepositoryTest {
 		
 		assertThat(planetOpt).isEmpty();
 	}
-	@Test
-	public void listPlanets_ReturnsFilteredPlanets() {
-		Example<Planet> queryWithoutFilters = QueryBuilder.makeQuery(new Planet());
-		Example<Planet> queryWithFilters = QueryBuilder.makeQuery(new Planet(0, TATOOINE.getClimate(),TATOOINE.getTerrain(), null));
-		
-		List<Planet>  responseWithoutFilters = planetRepository.getList(queryWithoutFilters);
-		List<Planet>  responseWithFilters = planetRepository.getList(queryWithFilters);
+//	@Test
+//	public void listPlanets_ReturnsFilteredPlanets() {
+//		Example<Planet> queryWithoutFilters = QueryBuilder.makeQuery(new Planet());
+//		Example<Planet> queryWithFilters = QueryBuilder.makeQuery(new Planet(0, TATOOINE.getClimate(),TATOOINE.getTerrain(), null));
+//		
+//		List<Planet>  responseWithoutFilters = planetRepository.getList(queryWithoutFilters);
+//		List<Planet>  responseWithFilters = planetRepository.getList(queryWithFilters);
+//	
+//		assertThat(responseWithoutFilters).isNotEmpty();
+//		assertThat(responseWithoutFilters).hasSize(3);
+//		assertThat(responseWithFilters).isNotEmpty();
+//		assertThat(responseWithFilters).hasSize(1);
+//		assertThat(responseWithFilters.get(0)).isEqualTo(TATOOINE);
+//	}
+//	
+//	@Test
+//	public void listPlanets_ReturnsNoPlanets() {
+//		Example<Planet> query = QueryBuilder.makeQuery(new Planet());
+//		List<Planet>  response = planetRepository.getList(query);
+//		
+//		assertThat(response).isEmpty();
+//	}
 	
-		assertThat(responseWithoutFilters).isNotEmpty();
-		assertThat(responseWithoutFilters).hasSize(3);
-		assertThat(responseWithFilters).isNotEmpty();
-		assertThat(responseWithFilters).hasSize(1);
-		assertThat(responseWithFilters.get(0)).isEqualTo(TATOOINE);
+	@Test
+	public void removePlanet_WithExistingId_RemovesPlanet() {
+		Planet planet = entityManager.persistAndFlush(PLANET);
+		
+		planetRepository.deleteById(planet.getId());
+		Planet removedPlanet = entityManager.find(Planet.class,planet.getId());
+		assertThat(removedPlanet).isNull();
 	}
 	
 	@Test
-	public void listPlanets_ReturnsNoPlanets() {
-		Example<Planet> query = QueryBuilder.makeQuery(new Planet());
-		List<Planet>  response = planetRepository.getList(query);
-		
-		assertThat(response).isEmpty();
+	public void removePlanet_WithUnexistingId_ThrowsException() {
+		assertThatThrownBy(() -> planetRepository.deleteById(1L)).isInstanceOf(EmptyResultDataAccessException.class);
 	}
 }
